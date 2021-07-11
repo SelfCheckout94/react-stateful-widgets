@@ -54,7 +54,7 @@ export default function Input() {
     marginBottom: "0.3em",
     color: inputValue.length < 11 ? "royalblue" : "crimson",
   };
-  console.log(style);
+
   return (
     <div className="widget-input container">
       <h2>Input</h2>
@@ -68,7 +68,6 @@ export default function Input() {
           onChange={changeInput}
           value={inputValue}
         />
-        {console.log(style)}
         <button id="resetInput" onClick={reset}>
           Reset
         </button>

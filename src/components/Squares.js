@@ -34,9 +34,6 @@ export default function Squares() {
       return "";
     }
   };
-  console.log("squares => ", squares);
-  console.log(getClassName(squares[0]));
-  // console.log("getClassName => ", getClassName(squares[0]));
 
   const markActive = (id) => {
     // This is a helper used inside an _inlined_ click handler (see below). Set the id argument to become the active id in state (unless it already is, in which case we should reset the currently active square id back to initial state).
