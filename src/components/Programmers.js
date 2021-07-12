@@ -26,61 +26,51 @@ export const listOfAwesome = [
 
 export default function Programmers() {
   const [list, setList] = useState(listOfAwesome);
-  const [id, setId] = useState(null);
+  const [proId, setProId] = useState(null);
   // We'll have to use the state hook twice, as we need two slices of state.
   // The programmers list on the one hand, and the id of the featured programmer on the other.
 
+  // Leave this for last!
+  // This is NOT an event handler but a helper function. See its usage inside the JSX.
+  // It's going to utilize both slices of state to return the _name_ of the featured dev.
+  // The beauty of closures is that we can "see" both slices of state from this region
+  // of the program, without needing to inject the information through arguments.
+
   const getNameOfFeatured = () => {
-    // Leave this for last!
-    // This is NOT an event handler but a helper function. See its usage inside the JSX.
-    // It's going to utilize both slices of state to return the _name_ of the featured dev.
-    // The beauty of closures is that we can "see" both slices of state from this region
-    // of the program, without needing to inject the information through arguments.
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].id === id) {
-        return list[i].name;
-      }
-    }
+    const obj = list.find(({ id }) => id === proId);
+    return obj.name;
   };
-  console.log(list.map((obj) => obj.name));
 
   const style = {
     fontSize: "1.5em",
     marginTop: "0.5em",
-    color: id ? "gold" : "royalblue",
+    color: proId ? "gold" : "royalblue",
   };
 
+  /* Nasty bug! We should map over a slice of state, instead of 'listOfAwesome'.
+          We might think: "it works, though!" But if the list of programmers is not state,
+          we could never add or edit programmers in the future. The list would be a static thing." */
   return (
     <div className="container widget-programmers">
       <h2>Programmers</h2>
       <div className="programmers">
-        {
-          /* Nasty bug! We should map over a slice of state, instead of 'listOfAwesome'.
-          We might think: "it works, though!" But if the list of programmers is not state,
-          we could never add or edit programmers in the future. The list would be a static thing." */
-          list.map((dev) => (
-            <div className="programmer" key={dev.id}>
-              {dev.name}
-              <button
-                onClick={() => {
-                  setId(dev.id);
-                }}
-              >
-                Feature
-              </button>
-            </div>
-          ))
-        }
+        {list.map((dev) => (
+          <div className="programmer" key={dev.id}>
+            {dev.name}
+            <button
+              onClick={() => {
+                setProId(dev.id);
+              }}
+            >
+              Feature
+            </button>
+          </div>
+        ))}
       </div>
       <div id="featured" style={style}>
-        {
-          // Ternaries are fantastic to render "one thing or the other" depending on the "truthiness" of something.
-          // Pseudo-code: if the currently featured id is truthy render text 1, otherwise render text 2.
-          // Replace the hard-coded false with the correct variable.
-          id
-            ? `🎉 Let's celebrate ${getNameOfFeatured()}! 🥳`
-            : "Pick an awesome programmer"
-        }
+        {proId
+          ? `🎉 Let's celebrate ${getNameOfFeatured()}! 🥳`
+          : "Pick an awesome programmer"}
       </div>
     </div>
   );
